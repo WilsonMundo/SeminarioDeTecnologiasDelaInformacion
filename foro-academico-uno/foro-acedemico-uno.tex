@@ -1,0 +1,95 @@
+\documentclass[12pt,letterpaper]{article}
+
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[spanish,es-nodecimaldot]{babel}
+\usepackage{newtxtext,newtxmath}
+\usepackage[letterpaper,margin=2.4cm]{geometry}
+\usepackage{microtype}
+\usepackage{ragged2e}
+\usepackage{xurl}
+\usepackage{csquotes}
+\usepackage[hidelinks]{hyperref}
+\usepackage{enumitem}
+\usepackage[backend=biber,style=apa,sorting=nyt]{biblatex}
+\DeclareLanguageMapping{spanish}{spanish-apa}
+\addbibresource{referencias.bib}
+
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{3pt}
+\setlength{\emergencystretch}{2em}
+\setlist[enumerate]{leftmargin=1.4em,itemsep=1pt,topsep=2pt,parsep=0pt}
+\setlength{\bibitemsep}{3pt}
+\renewcommand*{\bibfont}{\normalfont\normalsize}
+
+\newcommand{\seccion}[1]{%
+  \vspace{4pt}%
+  {\noindent\textbf{#1}\par}%
+  \vspace{1pt}%
+}
+
+\begin{document}
+\justifying
+\sloppy
+
+\begin{center}
+{\bfseries ENCUESTAS EFECTIVAS Y OPTIMAS\par}
+\vspace{4pt}
+{\itshape W. N. Mundo Alonzo\par}
+7690-15-6862 Universidad Mariano Gálvez\par
+22026-7690-047-A SEMINARIO DE TECNOLOGÍAS DE INFORMACIÓN\par
+{\itshape \href{mailto:wmundoa@miumg.edu.gt}{wmundoa@miumg.edu.gt}\par}
+\end{center}
+
+\seccion{Resumen}
+Este artículo analiza cómo diseñar y ejecutar una encuesta efectiva y metodológicamente sólida, entendiendo la calidad no como la simple obtención de muchas respuestas, sino como la capacidad de producir datos válidos, comparables y útiles para una decisión o pregunta de investigación. El objetivo es sintetizar criterios de diseño que reduzcan errores de cobertura, muestreo, medición y no respuesta. Para ello se contrastaron recomendaciones de la American Association for Public Opinion Research, Pew Research Center, los Centers for Disease Control and Prevention, el U.S. Census Bureau y literatura académica sobre construcción de cuestionarios. El análisis muestra que una encuesta de calidad comienza con objetivos específicos y una población claramente delimitada; continúa con una estrategia de muestreo coherente, preguntas breves y neutrales, opciones de respuesta exhaustivas y mutuamente excluyentes, un orden lógico y una experiencia de respuesta de baja carga. La preprueba mediante entrevistas cognitivas, pilotos o pruebas de usabilidad permite detectar interpretaciones inesperadas antes de recolectar datos a gran escala. Finalmente, la calidad depende de monitorear la aplicación, documentar el tratamiento de respuestas incompletas y reportar con transparencia el método utilizado. Se concluye que una encuesta óptima es un proceso iterativo de control del error y no únicamente un formulario bien redactado.
+
+\noindent\textbf{Palabras claves:} encuesta, cuestionario, muestreo, validez, sesgo
+
+\seccion{Desarrollo del tema}
+
+\textbf{Definir el propósito y la población}\par
+Una encuesta debe comenzar con una pregunta de investigación precisa y con la decisión explícita de qué información se necesita para responderla. La American Association for Public Opinion Research (AAPOR) recomienda comprobar primero si una encuesta es realmente el método apropiado y si existen datos previos suficientemente actuales. También debe definirse la población objetivo, la unidad de análisis y el marco desde el cual se seleccionarán participantes, porque una muestra grande no corrige por sí sola una cobertura deficiente o una selección sesgada \parencite{aapor_best}. En términos prácticos, cada pregunta del cuestionario debería justificar su presencia por una relación directa con un objetivo; los ítems que no aportan a una variable, decisión o hipótesis aumentan la carga del participante y pueden reducir la calidad de las respuestas.
+
+\textbf{Diseñar una muestra defendible}\par
+La muestra debe representar, en la medida de lo posible, a la población sobre la cual se desean hacer inferencias. Los diseños probabilísticos permiten conocer la probabilidad de selección y facilitan la estimación del error muestral; los diseños no probabilísticos pueden ser útiles cuando existen restricciones operativas, pero requieren especial cautela al generalizar resultados y mayor transparencia al documentar el reclutamiento \parencite{aapor_best}. El tamaño de muestra no debe elegirse por una cifra arbitraria: depende del nivel de precisión buscado, la variabilidad esperada, el diseño de selección, la disponibilidad del marco y el análisis planeado. Una encuesta puede ser numerosa y, aun así, estar sesgada si ciertos grupos tienen pocas posibilidades de participar o si quienes no responden difieren sistemáticamente de quienes sí responden.
+
+\textbf{Redactar preguntas que midan un solo concepto}\par
+La redacción debe ser breve, concreta, neutral y comprensible para la población objetivo. Pew Research Center advierte que incluso cambios pequeños en las palabras pueden modificar las respuestas y que las preguntas de doble contenido producen datos difíciles de interpretar. Por ello conviene evitar tecnicismos innecesarios, dobles negaciones, términos emocionalmente cargados y formulaciones que sugieran la respuesta considerada correcta \parencite{pew_questions}. Cuando se usan preguntas cerradas, las opciones deben ser pertinentes, mutuamente excluyentes y suficientemente exhaustivas; cuando una pregunta es abierta, debe quedar claro qué tipo de respuesta se espera. Las escalas ordinales deben conservar un orden lógico, mientras que ciertas listas nominales pueden rotarse o aleatorizarse para distribuir posibles efectos de primacía o recencia \parencite{pew_questions}.
+
+La elección entre preguntas abiertas y cerradas debe responder al objetivo. Las abiertas son valiosas para explorar categorías no previstas y comprender el lenguaje del participante, pero requieren codificación posterior. Las cerradas facilitan la comparación y el análisis, aunque sus alternativas pueden influir en lo que el encuestado selecciona. Una práctica útil consiste en explorar inicialmente con preguntas abiertas o investigación cualitativa y, después, construir categorías cerradas basadas en patrones observados. En escalas que pretenden medir constructos como satisfacción, confianza o percepción, la literatura recomienda revisar la validez de contenido, preprobar los ítems y comprobar que las preguntas realmente representen el concepto que se desea medir \parencite{artino2014}.
+
+\textbf{Orden, experiencia de respuesta y modo de aplicación}\par
+El cuestionario debe funcionar como una conversación estructurada. Las preguntas iniciales deberían ser fáciles, pertinentes y poco sensibles; las preguntas demográficas o delicadas suelen ubicarse después, salvo que sean necesarias para determinar elegibilidad o saltos del cuestionario. El orden importa porque una pregunta previa puede proporcionar un contexto que cambie la interpretación de la siguiente \parencite{pew_questions}. También conviene agrupar ítems por tema, utilizar instrucciones visibles, programar saltos correctamente y evitar matrices o pantallas que exijan esfuerzo innecesario, especialmente en dispositivos móviles.
+
+La versión vigente de las guías del U.S. Census Bureau para encuestas web integra evidencia experimental, pruebas de usabilidad y heurísticas de interacción para orientar elementos de navegación, tipos de pregunta y pantallas de revisión o envío \parencite{census_guidelines}. Esto subraya que la calidad del cuestionario digital también depende de la interfaz: botones claros, rutas coherentes, validaciones que no bloqueen injustificadamente y diseño adaptable. El modo de aplicación ---web, teléfono, presencial, correo o combinación--- debe elegirse según la población, los recursos y la sensibilidad del tema, ya que la presencia de un entrevistador puede aumentar la deseabilidad social en algunas preguntas \parencite{pew_questions}.
+
+\textbf{Preprobar, aplicar y controlar la calidad}\par
+Antes del lanzamiento conviene realizar una preprueba con personas semejantes a la población objetivo. Los Centers for Disease Control and Prevention (CDC) señalan que la evaluación empírica y sistemática de preguntas ayuda a identificar errores de comprensión, respuesta y comparabilidad entre grupos; las entrevistas cognitivas permiten conocer cómo interpreta el participante una pregunta y cómo construye su respuesta \parencite{cdc_question_eval}. Además del contenido, debe comprobarse la programación: saltos, obligatoriedad, visualización móvil, tiempos de carga, registro de valores faltantes y funcionamiento de escalas.
+
+Durante la recolección deben monitorearse tasas de inicio y finalización, abandonos, tiempos inusualmente cortos, patrones repetitivos y distribución de respuestas. La meta no es eliminar toda no respuesta, sino detectar si puede introducir sesgo y documentar las acciones de seguimiento. AAPOR recomienda controles durante todo el ciclo de la encuesta y transparencia al informar población, tamaño de muestra, modo, reclutamiento, construcción de la muestra, ponderaciones, texto de preguntas y opciones de respuesta \parencite{aapor_best}. En consecuencia, el análisis debe distinguir entre ``no aplica'', ``no sabe'', ``prefiere no responder'' y una omisión real, porque representan situaciones diferentes.
+
+Una encuesta puede considerarse óptima cuando consigue un equilibrio entre rigor, carga para el participante, costo y utilidad. Reducir preguntas innecesarias, pilotar antes de escalar y documentar decisiones metodológicas suele producir más valor que aumentar indiscriminadamente el número de participantes. La optimización, por tanto, consiste en minimizar las principales fuentes de error sin perder viabilidad operativa.
+
+\seccion{Observaciones y comentarios}
+La principal limitación de muchas encuestas prácticas es tratar el cuestionario como un producto aislado y no como parte de un sistema de medición. Un formulario visualmente atractivo puede producir conclusiones débiles si la población está mal definida, la muestra excluye grupos relevantes o las preguntas inducen respuestas. En entornos digitales, la facilidad de distribuir enlaces aumenta este riesgo porque la rapidez de recolección puede confundirse con representatividad. La recomendación profesional es invertir primero en claridad de objetivos, preprueba y trazabilidad metodológica; solo después conviene optimizar difusión, automatización y volumen de respuestas.
+
+\seccion{Conclusiones}
+\begin{enumerate}
+  \item Una encuesta efectiva comienza con objetivos específicos, una población definida y un diseño muestral coherente con las inferencias que se desean realizar.
+  \item La calidad del dato depende de preguntas claras, neutrales y centradas en un solo concepto, acompañadas de opciones de respuesta bien construidas y un orden que reduzca efectos de contexto.
+  \item La preprueba mediante pilotos, entrevistas cognitivas o pruebas de usabilidad es indispensable para detectar problemas de comprensión y funcionamiento antes de la aplicación definitiva.
+  \item La optimización exige equilibrar precisión, carga del participante y recursos, además de monitorear la recolección y reportar con transparencia las decisiones metodológicas.
+\end{enumerate}
+
+\seccion{Bibliografía}
+\printbibliography[heading=none]
+
+\seccion{Repositorio del código fuente}
+Código fuente del documento:\par
+\texttt{[https://github.com/WilsonMundo/SeminarioDeTecnologiasDelaInformacion]}
+
+\seccion{link de encuesta}
+Enlace a la encuesta:\par
+\texttt{[https://forms.cloud.microsoft/r/60mUMXyHeT?origin=lprLink]}
+\end{document}
