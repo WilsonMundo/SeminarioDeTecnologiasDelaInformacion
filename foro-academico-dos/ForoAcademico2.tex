@@ -1,0 +1,98 @@
+\documentclass[12pt,letterpaper]{article}
+
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[spanish,es-nodecimaldot]{babel}
+\usepackage{newtxtext,newtxmath}
+\usepackage[letterpaper,margin=2.4cm]{geometry}
+\usepackage{microtype}
+\usepackage{ragged2e}
+\usepackage{xurl}
+\usepackage{csquotes}
+\usepackage[hidelinks]{hyperref}
+\usepackage{enumitem}
+\usepackage[backend=biber,style=apa,sorting=nyt]{biblatex}
+\DeclareLanguageMapping{spanish}{spanish-apa}
+\addbibresource{referencias.bib}
+
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{3pt}
+\setlength{\emergencystretch}{2em}
+\setlist[enumerate]{leftmargin=1.4em,itemsep=1pt,topsep=2pt,parsep=0pt}
+\setlength{\bibitemsep}{3pt}
+\renewcommand*{\bibfont}{\normalfont\normalsize}
+
+\newcommand{\seccion}[1]{%
+  \vspace{4pt}%
+  {\noindent\textbf{#1}\par}%
+  \vspace{1pt}%
+}
+
+\begin{document}
+\justifying
+\sloppy
+
+\begin{center}
+{\bfseries BUENAS PRACTICAS EN APLICACIONES REACTIVAS\par}
+\vspace{4pt}
+{\itshape W. N. Mundo Alonzo\par}
+7690-15-6862 Universidad Mariano Gálvez\par
+22026-7690-047-A SEMINARIO DE TECNOLOGÍAS DE INFORMACIÓN\par
+{\itshape \href{mailto:wmundoa@miumg.edu.gt}{wmundoa@miumg.edu.gt}\par}
+\end{center}
+
+\seccion{Resumen}
+El presente artículo analiza buenas prácticas para desarrollar aplicaciones reactivas capaces de conservar tiempos de respuesta previsibles ante variaciones de carga y fallos parciales. El objetivo es identificar decisiones de arquitectura, programación y operación que permitan aprovechar la asincronía sin introducir consumo ilimitado de recursos, errores difíciles de rastrear o dependencias frágiles. El tema se aborda mediante una síntesis crítica del Manifiesto Reactivo, la especificación Reactive Streams y documentación técnica oficial sobre Project Reactor y patrones de resiliencia. El análisis muestra que la reactividad no consiste únicamente en emplear una biblioteca de flujos: requiere límites explícitos entre componentes, comunicación no bloqueante, contrapresión, aislamiento de fallos, tiempos de espera, reintentos controlados y observabilidad del flujo completo. También se destaca la necesidad de encapsular operaciones bloqueantes, limitar concurrencia y colas, preservar el contexto de diagnóstico y verificar escenarios de cancelación, saturación y recuperación. Estas prácticas reducen la probabilidad de fallos en cascada y permiten que el sistema degrade su servicio de manera controlada. Se concluye que una implementación reactiva efectiva surge de combinar principios arquitectónicos con disciplina operativa, pruebas específicas y medición continua, en lugar de limitarse a sustituir llamadas síncronas por operadores asíncronos.
+
+\noindent\textbf{Palabras claves:} programación reactiva, asincronía, contrapresión, resiliencia, observabilidad
+
+\seccion{Desarrollo del tema}
+
+\textbf{Comprender la reactividad como propiedad del sistema}\par
+Una aplicación reactiva busca responder de forma oportuna y consistente, incluso cuando aumenta la demanda o falla una parte de la infraestructura. El Manifiesto Reactivo organiza este propósito en cuatro propiedades relacionadas: capacidad de respuesta, resiliencia, elasticidad y orientación a mensajes. La comunicación asíncrona establece límites entre componentes, disminuye el acoplamiento y facilita aislar tanto el trabajo como los fallos; la elasticidad, por su parte, exige evitar puntos centrales de contención y disponer de mediciones que permitan ajustar recursos según la carga \parencite{boner2014}.
+
+Conviene distinguir un sistema reactivo de una función que devuelve un tipo reactivo. Adoptar \texttt{Mono}, \texttt{Flux} u otra abstracción de flujo no garantiza por sí mismo que la base de datos, los clientes de red y los servicios posteriores trabajen sin bloqueo. Si una operación bloqueante ocupa el hilo responsable de atender eventos, el sistema puede perder capacidad de respuesta aunque su interfaz parezca asíncrona. La primera práctica, por tanto, es diseñar el flujo de extremo a extremo e identificar en cada dependencia si existe espera bloqueante, qué recurso utiliza y cómo se limita su concurrencia.
+
+\textbf{Mantener una cadena no bloqueante y acotada}\par
+Reactive Streams define un modelo para procesar secuencias asíncronas con contrapresión no bloqueante. Su finalidad es evitar que un consumidor lento obligue al sistema a almacenar una cantidad arbitraria de elementos; el consumidor comunica demanda y el productor ajusta la entrega a esa capacidad \parencite{reactivestreams}. Esta propiedad debe conservarse en todos los límites relevantes. Solicitar datos sin límite, acumular listas completas o usar colas sin capacidad máxima desplaza el problema y convierte un pico de tráfico en presión de memoria.
+
+Las operaciones de entrada y salida deben usar controladores no bloqueantes cuando estén disponibles. Cuando una dependencia heredada solo ofrece una interfaz bloqueante, es preferible aislarla en un grupo de hilos limitado, medir la cola y aplicar límites de tiempo, en lugar de ejecutarla sobre el planificador que atiende el flujo principal. Project Reactor advierte que sus planificadores tienen propósitos diferentes y que \texttt{boundedElastic} está destinado a trabajo bloqueante acotado, mientras los operadores \texttt{block()}, \texttt{blockFirst()} y \texttt{blockLast()} no son adecuados dentro de planificadores no bloqueantes \parencite{reactorreference}. El aislamiento es una medida de transición; si se usa sin límites, únicamente oculta la saturación.
+
+También debe elegirse deliberadamente la estrategia cuando la demanda supera la capacidad: regular al productor, almacenar hasta un máximo conocido, descartar información que pueda perderse o rechazar con un error explícito. Ninguna estrategia es universal. Una transmisión de telemetría puede conservar solo el valor más reciente, mientras una transacción financiera no debe descartarse. La decisión debe derivarse del significado del dato y documentarse en el diseño.
+
+\textbf{Diseñar resiliencia y control de sobrecarga}\par
+Los fallos en sistemas distribuidos son inevitables; una práctica responsable consiste en impedir que se propaguen sin control. Los componentes deben tener tiempos de espera finitos, presupuestos de latencia y mecanismos de cancelación. Los reintentos se reservan para fallos transitorios y operaciones seguras de repetir; además, requieren espera exponencial, variación aleatoria y un número máximo. Reintentar inmediatamente una operación no idempotente o una dependencia saturada puede duplicar efectos y agravar la sobrecarga.
+
+El patrón de interruptor de circuito detiene temporalmente las llamadas a una dependencia que supera un umbral de fallos; el aislamiento por compartimentos separa recursos para evitar que un consumidor agote la capacidad de los demás. Microsoft recomienda combinar, según el caso, compartimentos con limitación de tráfico, reintentos e interruptores de circuito, considerando el costo y la capacidad real de aislamiento \parencite{microsoftbulkhead}. Estas medidas deben aplicarse cerca del límite que controlan y acompañarse de una respuesta degradada válida, no de silencios o valores inventados.
+
+La elasticidad tampoco reemplaza el control de admisión. Escalar requiere tiempo y no corrige una dependencia con capacidad fija. Por ello deben definirse límites de concurrencia en puntos de entrada y operaciones de expansión, como solicitudes que generan múltiples llamadas posteriores. La documentación de Azure recomienda alinear los límites con los vectores reales de saturación, controlar el despliegue de solicitudes y tratar la regulación como un ciclo de medición, aplicación y ajuste \parencite{microsoftthrottling}. Rechazar temprano con una señal clara suele ser más seguro que aceptar trabajo que expirará dentro del sistema.
+
+\textbf{Componer flujos legibles y seguros}\par
+El código reactivo debe expresar transformación, combinación y recuperación sin ocultar efectos secundarios. Es aconsejable construir operadores pequeños con nombres ligados al dominio, mantener inmutables los datos que circulan y reservar \texttt{subscribe()} para los límites de la aplicación. Suscripciones anidadas fragmentan el control de cancelación y de errores; normalmente deben reemplazarse por operadores de composición como \texttt{flatMap}, \texttt{concatMap} o \texttt{zip}. La concurrencia de estos operadores se configura de forma explícita, porque un \texttt{flatMap} ilimitado puede abrir más trabajo del que una dependencia soporta.
+
+Los errores forman parte del flujo y deben conservar su causa. Recuperar cualquier excepción con un valor vacío puede confundir una falla técnica con ausencia legítima de datos. Es mejor clasificar errores recuperables y definitivos, enriquecerlos con contexto y decidir en qué frontera se transforman en una respuesta para el usuario. Asimismo, la cancelación debe liberar conexiones, archivos, temporizadores y otros recursos. Operadores de administración de recursos y bloques de finalización ayudan a mantener esta propiedad, pero deben comprobarse mediante pruebas.
+
+\textbf{Probar y observar el comportamiento temporal}\par
+Las pruebas unitarias de una cadena reactiva deben verificar valores, orden, errores, finalización y cancelación. También conviene controlar el tiempo virtual para validar esperas y reintentos sin ralentizar la suite, y utilizar editores de prueba que permitan comprobar la contrapresión. Las pruebas de integración deben introducir latencia, respuestas parciales, desconexiones y saturación para confirmar que los límites y mecanismos de recuperación producen el comportamiento previsto.
+
+En producción se necesitan métricas de latencia por percentiles, tasa de solicitudes, errores, cancelaciones, reintentos, tamaño de colas, demanda pendiente y saturación de grupos de hilos o conexiones. Los registros y trazas distribuidas deben conservar identificadores de correlación a través de cambios de hilo. Project Reactor ofrece mecanismos de contexto y observación, pero la instrumentación debe evitar etiquetas de cardinalidad ilimitada, ya que estas pueden consumir memoria en el sistema de métricas \parencite{reactorreference}. Las alertas deben vincularse con objetivos de servicio y con síntomas de saturación, no únicamente con el uso promedio de CPU.
+
+\seccion{Observaciones y comentarios}
+El principal riesgo de una adopción reactiva es aumentar la complejidad sin obtener un beneficio verificable. Para operaciones simples, de baja concurrencia o dominadas por procesamiento de CPU, un diseño síncrono bien dimensionado puede ser más fácil de mantener. La alternativa reactiva resulta especialmente útil cuando existe alta concurrencia y abundante espera de entrada y salida. Su incorporación debería sustentarse en mediciones, capacitación del equipo y una revisión explícita de las bibliotecas utilizadas, porque un solo tramo bloqueante o una cola ilimitada puede invalidar las ventajas del modelo.
+
+\seccion{Conclusiones}
+\begin{enumerate}
+  \item Una aplicación reactiva debe diseñarse como un sistema orientado a mensajes, resiliente y elástico; el uso aislado de tipos reactivos no garantiza capacidad de respuesta. Pero si da un beneficio observable en cuanto a la experiencia de usuario 
+  \item La contrapresión, los límites de concurrencia y las colas acotadas permiten adaptar la producción a la capacidad de consumo y evitan que la sobrecarga se convierta en agotamiento de memoria.
+  \item Los tiempos de espera, la cancelación, el aislamiento, los reintentos controlados y los interruptores de circuito reducen fallos en cascada cuando se aplican según la semántica de cada operación. 
+  \item la implementacion de este tipo de aplicaciones requiere una comunicacion clara entre los equipos de desarrolo y una rigurosa documentacion ya que la complejidad de los flujos puede aumentar la dificultad y mentenimiento o generar demasiada deuda tenica lo que haria contraproducente la implementacion de esto
+\end{enumerate}
+
+\seccion{Bibliografía}
+\printbibliography[heading=none]
+
+\seccion{Repositorio del código fuente}
+Código fuente del documento:\par
+\texttt{[https://github.com/WilsonMundo/SeminarioDeTecnologiasDelaInformacion/tree/main/foro-academico-dos]}
+
+\end{document}
