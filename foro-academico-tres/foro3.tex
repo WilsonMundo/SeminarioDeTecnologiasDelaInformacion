@@ -1,0 +1,100 @@
+\documentclass[12pt,letterpaper]{article}
+
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[spanish,es-nodecimaldot]{babel}
+\usepackage{newtxtext,newtxmath}
+\usepackage[letterpaper,margin=2.4cm]{geometry}
+\usepackage{microtype}
+\usepackage{ragged2e}
+\usepackage{xurl}
+\usepackage[hidelinks]{hyperref}
+\usepackage{enumitem}
+
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{3pt}
+\setlength{\emergencystretch}{2em}
+\setlist[enumerate]{leftmargin=1.4em,itemsep=1pt,topsep=2pt,parsep=0pt}
+
+\newcommand{\seccion}[1]{%
+  \vspace{4pt}%
+  {\noindent\textbf{#1}\par}%
+  \vspace{1pt}%
+}
+
+\newcommand{\referencia}[1]{%
+  \par\hangindent=1.27cm\hangafter=1 #1\par
+}
+
+\begin{document}
+\justifying
+\sloppy
+
+\begin{center}
+{\bfseries ARQUITECTURA SEGUN EL TIPO DE APLICACION\par}
+\vspace{4pt}
+{\itshape W. N. Mundo Alonzo\par}
+7690-15-6862 Universidad Mariano Gálvez\par
+22026-7690-047-A SEMINARIO DE TECNOLOGÍAS DE INFORMACIÓN\par
+{\itshape \href{mailto:wmundoa@miumg.edu.gt}{wmundoa@miumg.edu.gt}\par}
+\end{center}
+
+\seccion{Resumen}
+Este artículo analiza cómo elegir la arquitectura de una aplicación antes de comprometer el proyecto con tecnologías, servicios o divisiones difíciles de revertir. El objetivo fue proponer una decisión más cercana a la práctica profesional, en la que el tipo de aplicación constituye una referencia inicial, pero no reemplaza el conocimiento del negocio ni la validación técnica. El tema se abordó contrastando patrones arquitectónicos con preguntas que deben resolverse junto con usuarios, desarrolladores, especialistas en infraestructura, seguridad y datos. También se consideró el valor empírico de revisar un proyecto semejante: su arquitectura puede aportar patrones, métricas y problemas conocidos, aunque no debe copiarse sin comprobar que ambos contextos comparten volumen, criticidad, equipo y restricciones. El análisis determina que primero deben reconocerse los flujos críticos, atributos de calidad, riesgos y capacidades operativas; después se comparan alternativas y se prueba el aspecto de mayor incertidumbre. Una aplicación administrativa puede iniciar como monolito modular, mientras los microservicios, los eventos o las canalizaciones especializadas solo se justifican ante necesidades demostrables. Se concluye que elegir arquitectura es formular y comprobar hipótesis con evidencia del contexto. La solución adecuada no es la más novedosa, sino la que el equipo puede explicar, validar, operar y evolucionar con apoyo de decisiones documentadas y experiencia profesional pertinente.
+
+\noindent\textbf{Palabras claves:} arquitectura de software, atributos de calidad, microservicios, eventos, decisiones arquitectónicas
+
+\seccion{Desarrollo del tema}
+
+\textbf{El tipo de aplicación como punto de partida}\par
+Una arquitectura de software define los componentes principales, sus responsabilidades y la forma en que se comunican. Elegirla no consiste en seleccionar primero una tecnología. Microsoft (2025) explica que cada estilo aporta propiedades deseables, pero también impone restricciones. La decisión debe comenzar con el problema empresarial: usuarios, operaciones críticas, volumen, variación de carga, sensibilidad de los datos y consecuencias de una interrupción o inconsistencia.
+
+El diagnóstico requiere la participación de quienes conocen el sistema. Los usuarios revelan recorridos y excepciones; negocio define la tolerancia a interrupciones; desarrollo identifica dependencias; infraestructura aclara límites de despliegue; y los especialistas en seguridad y datos establecen controles, trazabilidad e integridad. Con ellos se formulan escenarios medibles sobre concurrencia, respuesta, disponibilidad, pérdida de datos y frecuencia de cambios. El marco Well-Architected de Amazon Web Services (AWS, 2024) ayuda a revisar operación, seguridad, confiabilidad, rendimiento, costos y sostenibilidad, pero cada dimensión debe adaptarse al proyecto.
+
+Una aplicación semejante también aporta evidencia práctica mediante sus diagramas, incidentes, métricas y costos. Sin embargo, sirve como referencia y no como plantilla. Antes de reutilizar un patrón se comparan equipo, volumen, criticidad, infraestructura, presupuesto y ritmo de cambio. Así se aprovecha la experiencia previa sin trasladar complejidad creada para condiciones diferentes.
+
+\textbf{Aplicaciones transaccionales y administrativas}\par
+Los sistemas de inventarios, facturación o gestión académica realizan operaciones transaccionales sobre datos estructurados. Cuando el dominio es comprensible, la carga es moderada y un equipo mantiene el producto, una arquitectura en capas o un monolito modular suele bastar. Separar presentación, negocio y datos simplifica pruebas, transacciones y operación. Los módulos pueden representar capacidades claras y evitar dependencias circulares, lo cual permite extraerlos si después surge una necesidad real de escalado o despliegue independiente. Las tareas lentas pueden enviarse a una cola sin distribuir todo el sistema.
+
+\textbf{Dominios complejos y evolución frecuente}\par
+Los microservicios se justifican cuando existen capacidades de negocio bien delimitadas, varios equipos requieren despliegues autónomos o algunos componentes escalan de manera distinta. Favorecen el aislamiento de fallos y el escalado selectivo (Microsoft, 2025), pero agregan fallos de red, versionado de interfaces, observabilidad distribuida y dificultades de consistencia. También exigen automatización y experiencia en desarrollo y operaciones (DevOps). Para un equipo pequeño con un producto estable, la separación prematura puede reducir la productividad; conviene iniciar con módulos y extraer servicios solo ante necesidades comprobadas.
+
+\textbf{Procesos asíncronos y aplicaciones en tiempo real}\par
+Las arquitecturas orientadas a eventos son útiles en telemetría del Internet de las Cosas (IoT), notificaciones, integración y procesos que reaccionan ante cambios. El desacoplamiento permite absorber picos y añadir consumidores, pero introduce entrega duplicada, problemas de orden, versionado y consistencia eventual (Microsoft, 2026). No conviene aplicarlas a una solicitud sencilla que exige confirmación inmediata y consistencia fuerte. Su adopción debe definir idempotencia, reintentos, errores y trazabilidad; una solución híbrida puede mantener transacciones síncronas y publicar eventos después de confirmar cambios.
+
+\textbf{Aplicaciones de datos y cómputo intensivo}\par
+La inteligencia empresarial, el aprendizaje automático y el procesamiento masivo necesitan arquitecturas centradas en ingestión, transformación, almacenamiento y gobierno de datos. Los lotes priorizan volumen y costo; los flujos, baja latencia. En simulación, renderización u optimización, el trabajo puede distribuirse mediante colas y planificadores, pues escalar servidores web no elimina un cuello de botella de procesamiento. Asimismo, una aplicación móvil sin conexión necesita almacenamiento local, sincronización y resolución de conflictos. La arquitectura debe responder al comportamiento dominante de la carga, no solo al canal de acceso.
+
+\textbf{Proceso para justificar la elección}\par
+La elección puede tratarse como una investigación breve. Primero se reconstruye el funcionamiento mediante entrevistas, observación, integraciones e incidentes, hasta obtener pocos escenarios críticos y restricciones no negociables. Después se consultan especialistas y proyectos comparables para reconocer patrones útiles, fallos repetidos y supuestos pendientes, diferenciando experiencia profesional de preferencia tecnológica.
+
+Luego se comparan al menos dos alternativas concretas. Cada una debe explicar datos, fallos, seguridad, despliegue, observabilidad y cambios. Una matriz puede ponderar consistencia, latencia, disponibilidad, costo y capacidad del equipo, haciendo visibles los compromisos. La propuesta se valida con una prueba de concepto dirigida al mayor riesgo: rendimiento con datos representativos, integración heredada, recuperación o capacidad operativa. Los resultados deben revisarse con usuarios y especialistas.
+
+Finalmente se adopta la opción cuyos beneficios comprobados compensan su complejidad. Los registros de decisiones de arquitectura (ADR, por sus siglas en inglés) conservan requisitos, alternativas y justificación (Google Cloud, 2024). También deben indicar qué evidencia provino del proyecto de referencia y cuándo revisar la decisión. Tras el despliegue, métricas, incidentes y costos se contrastan con los escenarios iniciales; la arquitectura evoluciona cuando cambia la evidencia.
+
+\seccion{Observaciones y comentarios}
+La documentación de patrones orienta, pero la decisión se vuelve creíble cuando incorpora experiencia verificable del contexto. Conversar con profesionales y estudiar un proyecto similar reduce incertidumbre, aunque también puede introducir sesgos si se imitan soluciones exitosas sin revisar sus condiciones. La práctica recomendable es convertir esa experiencia en preguntas y pruebas: qué problema resolvió el patrón, con qué carga, qué costo operativo produjo y qué cambiaría en el nuevo proyecto. Así, la referencia sirve para aprender y no para copiar.
+
+\seccion{Conclusiones}
+\begin{enumerate}
+  \item La arquitectura debe elegirse después de comprender los procesos reales y consultar a usuarios y profesionales de negocio, desarrollo, infraestructura, seguridad y datos.
+  \item Un proyecto semejante aporta evidencia práctica y patrones de referencia, pero sus componentes solo son reutilizables cuando sus supuestos coinciden con el nuevo contexto.
+  \item El tipo de aplicación genera una hipótesis inicial; los atributos de calidad, las restricciones, los riesgos y la capacidad operativa permiten aceptarla, modificarla o descartarla.
+  \item La comparación de alternativas debe mostrar compromisos concretos y probar la incertidumbre principal con cargas, datos e integraciones representativas.
+  \item La arquitectura adecuada es la alternativa que satisface las prioridades comprobadas con la menor complejidad sostenible y cuya decisión puede revisarse mediante evidencia, métricas y ADR.
+\end{enumerate}
+
+\seccion{Bibliografía}
+\referencia{Amazon Web Services. (2024). \textit{AWS Well-Architected Framework}. \url{https://docs.aws.amazon.com/wellarchitected/latest/framework/welcome.html}}
+
+\referencia{Google Cloud. (2024). \textit{Architecture decision records overview}. \url{https://docs.cloud.google.com/architecture/architecture-decision-records}}
+
+\referencia{Microsoft. (2025). \textit{Architecture styles}. Azure Architecture Center. \url{https://learn.microsoft.com/en-us/azure/architecture/guide/architecture-styles/}}
+
+\referencia{Microsoft. (2026). \textit{Event-driven architecture style}. Azure Architecture Center. \url{https://learn.microsoft.com/en-us/azure/architecture/guide/architecture-styles/event-driven}}
+
+\seccion{Repositorio del código fuente}
+Código fuente del documento:\par
+\texttt{[URL DEL REPOSITORIO GIT]}
+
+\end{document}
