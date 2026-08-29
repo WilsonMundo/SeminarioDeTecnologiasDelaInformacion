@@ -1,0 +1,86 @@
+\documentclass[12pt,letterpaper]{article}
+
+% Configuración general
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[spanish,es-nodecimaldot]{babel}
+\usepackage{newtxtext,newtxmath}
+\usepackage[letterpaper,margin=2.4cm]{geometry}
+\usepackage{setspace}
+\usepackage{ragged2e}
+\usepackage{microtype}
+\usepackage{enumitem}
+\usepackage{titlesec}
+\usepackage{csquotes}
+\usepackage{xurl}
+\usepackage[hidelinks]{hyperref}
+\usepackage[backend=biber,style=apa,sorting=nyt]{biblatex}
+\addbibresource{referencias.bib}
+
+% Formato del documento
+\setstretch{1.0}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{3pt}
+\setlist[enumerate]{leftmargin=*,topsep=2pt,itemsep=2pt,parsep=0pt}
+\titleformat{\section}{\normalfont\bfseries\normalsize}{}{0pt}{}
+\titlespacing*{\section}{0pt}{7pt}{3pt}
+\emergencystretch=2em
+
+\begin{document}
+\justifying
+
+\begin{center}
+{\bfseries CIBERSEGURIDAD Y SEGURIDAD DE LA INFORMACION}\par
+\vspace{4pt}
+{\itshape W. N. Mundo Alonzo}\par
+7690-15-6862 Universidad Mariano Gálvez\par
+22026-7690-047-A SEMINARIO DE TECNOLOGÍAS DE INFORMACIÓN\par
+{\itshape wmundoa@miumg.edu.gt}
+\end{center}
+
+\section*{Resumen}
+Este artículo analiza las diferencias y relaciones entre ciberseguridad, seguridad informática y seguridad de la información, términos que suelen utilizarse como equivalentes aunque responden a alcances distintos según el contexto técnico y organizacional. El objetivo es establecer una distinción práctica que permita comprender qué protege cada disciplina, cuáles son sus principales controles y por qué deben integrarse dentro de la gestión de riesgos. El tema se aborda mediante documentación técnica del National Institute of Standards and Technology (NIST), el Cybersecurity Framework 2.0 y la norma ISO/IEC 27001:2022. El análisis muestra que la seguridad de la información posee el alcance más amplio porque protege información en cualquier soporte y considera personas, procesos y tecnología; la seguridad informática se concentra especialmente en los recursos computacionales, sistemas, redes, aplicaciones y datos procesados por estos; y la ciberseguridad enfatiza la protección frente a amenazas y ataques que operan en el ciberespacio y afectan servicios digitales interconectados. Se concluye que las organizaciones no deberían gestionar estos conceptos como esfuerzos aislados, sino como componentes complementarios de un programa de seguridad basado en riesgos, gobierno, controles técnicos, respuesta a incidentes y mejora continua.
+
+\textbf{Palabras claves:} ciberseguridad, seguridad informática, seguridad de la información, gestión de riesgos, controles de seguridad
+
+\section*{Desarrollo del tema}
+
+\textbf{Alcance de los conceptos}
+
+La seguridad de la información tiene como finalidad preservar la información y los sistemas que la procesan frente al acceso, uso, divulgación, alteración, interrupción o destrucción no autorizados. El NIST relaciona este propósito con tres propiedades fundamentales: confidencialidad, integridad y disponibilidad \parencite{nist2026infosec}. Su alcance no depende únicamente de que la información exista en formato digital. Una política, un contrato impreso, una conversación confidencial, una base de datos y una copia de respaldo pueden contener información que requiere protección. Por ello, la seguridad de la información incluye controles administrativos, humanos, físicos y tecnológicos.
+
+La seguridad informática puede entenderse como la aplicación de medidas destinadas a proteger recursos computacionales tales como hardware, software, sistemas operativos, aplicaciones, redes, servicios y la información que estos almacenan o procesan. La terminología no es completamente uniforme: el glosario del NIST registra que \textit{computer security} puede aparecer como sinónimo de ciberseguridad en determinados documentos, pero también advierte que los términos seguridad de la información y seguridad informática continúan utilizándose según el alcance y la intención \parencite{nist2026computer}. En un uso práctico, seguridad informática resulta útil para describir el componente técnico de la protección: configuraciones seguras, control de accesos, gestión de vulnerabilidades, actualización de sistemas, copias de respaldo, cifrado, segmentación de redes, registros y monitoreo.
+
+La ciberseguridad amplía la atención hacia la protección de computadores, comunicaciones electrónicas, servicios y datos frente a daños y ataques vinculados al ciberespacio. El NIST la describe en términos de prevención, protección y recuperación de sistemas y comunicaciones, buscando conservar propiedades como disponibilidad, integridad, autenticación, confidencialidad y no repudio \parencite{nist2026cyber}. La diferencia principal no consiste en que la ciberseguridad sustituya a las otras disciplinas, sino en que enfatiza escenarios de interconexión, adversarios, ataques remotos, dependencia de terceros y continuidad de servicios digitales.
+
+\textbf{Relación entre personas, procesos y tecnología}
+
+Reducir la seguridad a herramientas tecnológicas genera una visión incompleta. ISO/IEC 27001:2022 establece requisitos para un Sistema de Gestión de Seguridad de la Información (SGSI) y promueve un enfoque que integra personas, políticas y tecnología dentro de un proceso de gestión de riesgos \parencite{iso27001}. Esto implica identificar activos de información, responsables, amenazas, vulnerabilidades, consecuencias y controles antes de decidir qué mecanismos implementar. Un sistema técnicamente protegido puede seguir siendo vulnerable si existen credenciales compartidas, privilegios excesivos, procesos de respaldo no probados, proveedores sin evaluación o personal sin formación adecuada.
+
+Los controles técnicos continúan siendo esenciales, pero deben responder al riesgo. Entre ellos se encuentran la autenticación multifactor, el principio de mínimo privilegio, el cifrado, la administración de parches, el endurecimiento de configuraciones, la protección de endpoints, el filtrado de tráfico y el monitoreo de eventos. A estos controles deben sumarse procedimientos para altas y bajas de usuarios, clasificación de información, continuidad operativa, gestión de proveedores y respuesta a incidentes. La combinación permite cubrir tanto la infraestructura informática como el valor de la información y los efectos que un incidente puede producir sobre las operaciones.
+
+\textbf{Gestión del riesgo y respuesta}
+
+El Cybersecurity Framework (CSF) 2.0 del NIST organiza los resultados de ciberseguridad en seis funciones: Gobernar, Identificar, Proteger, Detectar, Responder y Recuperar. Su propósito es ayudar a organizaciones de cualquier tamaño o sector a comprender, priorizar y comunicar sus riesgos de ciberseguridad sin imponer una única tecnología o método de implementación \parencite{pascoe2024csf}. La incorporación de Gobernar como función central refuerza que las decisiones de seguridad deben relacionarse con objetivos empresariales, responsabilidades, políticas, riesgo de terceros y supervisión directiva.
+
+En la práctica, estas funciones muestran cómo se relacionan los tres ámbitos. Identificar activos y clasificar información pertenece a una gestión amplia de seguridad de la información; proteger equipos, redes y aplicaciones requiere controles de seguridad informática; detectar actividad anómala, contener un ataque y recuperar servicios son actividades centrales de ciberseguridad. Una misma organización necesita las tres perspectivas porque una brecha puede comenzar con una vulnerabilidad técnica, comprometer información sensible y terminar afectando la continuidad del negocio, la reputación o el cumplimiento contractual.
+
+También debe considerarse que no todos los activos requieren el mismo nivel de protección. La inversión en controles debe responder al impacto esperado y a la probabilidad de las amenazas. Una medida costosa puede ser innecesaria para un activo de bajo impacto y, al mismo tiempo, resultar insuficiente para información crítica o sistemas esenciales. Por esta razón, la seguridad efectiva exige definir alcance, presupuesto, prioridades, tolerancia al riesgo y capacidades del equipo antes de seleccionar tecnologías. El objetivo no es eliminar todo riesgo, sino reducirlo a niveles aceptables y mantener capacidad de detección, respuesta y recuperación.
+
+\section*{Observaciones y comentarios}
+La principal dificultad al comparar estos conceptos es terminológica: diferentes normas, instituciones y organizaciones pueden utilizar seguridad informática y ciberseguridad con límites parcialmente superpuestos. Por ello, resulta más útil definir el alcance de protección que discutir cuál término es universalmente superior. En el ámbito profesional conviene documentar qué activos, procesos y responsabilidades cubre cada programa de seguridad. También debe evitarse adquirir herramientas antes de realizar una evaluación de riesgos, ya que el presupuesto, el alcance del proyecto, la capacidad operativa y la criticidad de la información condicionan qué controles son realmente sostenibles y efectivos.
+
+\section*{Conclusiones}
+\begin{enumerate}
+    \item La seguridad de la información constituye el enfoque más amplio porque busca proteger la información independientemente de su soporte y requiere controles administrativos, humanos, físicos y tecnológicos.
+    \item La seguridad informática se concentra principalmente en los recursos computacionales y en la aplicación de controles técnicos sobre sistemas, redes, aplicaciones y datos, aunque su terminología puede superponerse con ciberseguridad según la fuente utilizada.
+    \item La ciberseguridad enfatiza la prevención, detección, respuesta y recuperación frente a amenazas que afectan sistemas y servicios interconectados; por ello, debe integrarse con la gestión organizacional del riesgo y no limitarse a la instalación de herramientas defensivas.
+    \item La selección de controles debe considerar activos, riesgos, impacto, presupuesto, alcance, capacidades del equipo y continuidad operativa. La estrategia más adecuada es aquella que protege los recursos críticos con medidas proporcionales, verificables y sostenibles.
+\end{enumerate}
+
+\section*{Bibliografía}
+\printbibliography[heading=none]
+
+
+
+\end{document}
