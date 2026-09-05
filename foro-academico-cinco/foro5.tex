@@ -1,0 +1,95 @@
+% Archivo principal. No compilado, por indicación del estudiante.
+% Overleaf: subir main.tex y referencias.bib al mismo proyecto.
+% Compilador: pdfLaTeX. Bibliografía: Biber (gestionado por Overleaf).
+% Secuencia local: pdflatex main; biber main; pdflatex main; pdflatex main.
+% Extensión diseñada para 2--4 páginas; verificar paginación al compilar.
+\documentclass[12pt,letterpaper,onecolumn]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[spanish,es-nodecimaldot]{babel}
+\usepackage[margin=2.4cm]{geometry}
+\usepackage{newtxtext}
+\usepackage{microtype}
+\usepackage{enumitem}
+\usepackage{titlesec}
+\usepackage[backend=biber,style=apa,sorting=nyt]{biblatex}
+\DeclareLanguageMapping{spanish}{spanish-apa}
+\addbibresource{referencias.bib}
+\usepackage{xurl}
+\usepackage[hidelinks]{hyperref}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{3pt}
+\linespread{1}
+\titleformat{\section}{\normalfont\normalsize\bfseries}{}{0pt}{}
+\titlespacing*{\section}{0pt}{7pt}{3pt}
+\setlist[enumerate]{leftmargin=*,nosep,topsep=3pt}
+\setlength{\bibitemsep}{3pt}
+\setlength{\bibparsep}{0pt}
+\renewcommand*{\bibfont}{\normalfont\normalsize}
+\emergencystretch=2em
+\raggedbottom
+
+\begin{document}
+{\centering
+\textbf{ORQUESTACIÓN Y SERVICIOS EN LA NUBE}\par
+\textit{W. N. Mundo Alonzo}\par
+7690-15-6862 Universidad Mariano Gálvez\par
+22026-7690-047-A SEMINARIO DE TECNOLOGÍAS DE INFORMACIÓN\par
+\textit{\href{mailto:wmundoa@miumg.edu.gt}{wmundoa@miumg.edu.gt}}\par
+}
+
+\section*{Resumen}
+El artículo analiza la relación entre la orquestación de servidores, Kubernetes, los microservicios, OAuth 2.0 y la metodología de aplicaciones de doce factores para implementar servicios en la nube. Su objetivo es explicar cómo se complementan estas tecnologías y qué condiciones justifican su adopción. El trabajo se desarrolló mediante una revisión documental de especificaciones y documentación técnica oficial, contrastando responsabilidades arquitectónicas, operativas y de autorización. El análisis identifica que Kubernetes coordina la ejecución de cargas, mientras que los microservicios delimitan responsabilidades de negocio y los doce factores orientan la construcción de aplicaciones portables. OAuth 2.0 regula el acceso delegado, pero requiere controles actualizados y una distinción explícita respecto de la autenticación. Se propone un proceso de implementación que vincula construcción reproducible, configuración externa, despliegue gradual y evaluación operativa. Los resultados son conceptuales y no corresponden a pruebas de rendimiento. Se concluye que integrar estas prácticas puede facilitar la evolución y recuperación de los servicios, siempre que el presupuesto, el alcance y la capacidad del equipo permitan sostener la complejidad introducida.
+
+\textbf{Palabras claves:} Kubernetes, microservicios, OAuth 2.0, doce factores
+
+\section*{Desarrollo del tema}
+\textbf{Orquestación y responsabilidades arquitectónicas}
+
+La orquestación coordina recursos y operaciones para ejecutar aplicaciones de manera consistente. En la nube conviene distinguir el aprovisionamiento de servidores, redes y almacenamiento de la administración de las cargas que utilizan esos recursos. Kubernetes se concentra en esta última: su clúster reúne un plano de control y nodos trabajadores. El servidor de la interfaz de programación de aplicaciones (API) recibe operaciones; etcd conserva los datos del control; el planificador asigna los pods a nodos y los controladores gestionan el comportamiento declarado. En cada nodo, kubelet supervisa la ejecución de los contenedores mediante su entorno de ejecución \parencite{kubernetesComponentes}.
+
+Un pod agrupa contenedores que se ejecutan conjuntamente. La consecuencia arquitectónica es que distribuir contenedores entre servidores no define por sí mismo los límites del negocio. Los microservicios, en cambio, organizan la aplicación como servicios autónomos, con responsabilidades delimitadas y contratos de comunicación. Su despliegue independiente facilita cambios localizados y el escalamiento selectivo, pero introduce comunicación remota, consistencia distribuida y mayores exigencias de observación y operación \parencite{microsoftMicroservicios}.
+
+Por ejemplo, separar matrícula, pagos y notificaciones puede permitir que cada área evolucione a distinto ritmo. Esta división sería contraproducente si cada cambio exige modificar simultáneamente los tres servicios. Como criterio de diseño, la separación debe responder a responsabilidades estables y necesidades verificables. Antes de elegir la plataforma se deben establecer alcance funcional, demanda esperada, presupuesto y responsables de operación: una solución técnicamente viable puede resultar insostenible si su mantenimiento excede la capacidad disponible.
+
+\textbf{Despliegue declarativo y recuperación}
+
+En Kubernetes, un \textit{Deployment} expresa el estado deseado de una carga y administra sus actualizaciones mediante conjuntos de réplicas. La sustitución gradual de pods permite controlar cuántas instancias adicionales o no disponibles se admiten durante el cambio. También existe historial para regresar a una revisión conservada. Sin embargo, detectar que un despliegue dejó de progresar no implica ejecutar automáticamente su reversión \parencite{kubernetesDeployments}.
+
+Esto obliga a definir criterios de aceptación externos al simple arranque del proceso. En el ejemplo de matrícula, una versión puede iniciar correctamente y aun así rechazar inscripciones válidas. Se propone evaluar errores de negocio, latencia y consumo durante una liberación limitada antes de ampliar su uso. Asimismo, revertir contenedores no debe confundirse con restaurar información: una modificación incompatible del esquema de datos requiere su propia estrategia. La recuperación debe diseñarse para el sistema completo y ensayarse con operaciones representativas.
+
+\textbf{Doce factores para implementar servicios}
+
+La metodología \textit{The Twelve-Factor App} establece doce prácticas: (1) código bajo control de versiones; (2) dependencias declaradas y aisladas; (3) configuración en el entorno; (4) servicios de respaldo como recursos asociados; (5) separación de construcción, liberación y ejecución; (6) procesos sin estado persistente local; (7) exposición mediante puertos; (8) concurrencia mediante procesos; (9) inicio rápido y cierre ordenado; (10) semejanza entre desarrollo y producción; (11) registros como flujos de eventos; y (12) tareas administrativas como procesos puntuales \parencite{wigginsDoce}.
+
+Estas prácticas permiten sustituir instancias sin depender de archivos o sesiones guardados únicamente en ellas. La persistencia se delega a recursos externos, como bases de datos. Para una implementación propuesta, el código de cada servicio produciría un artefacto versionado; la liberación incorporaría configuración específica del entorno y la ejecución utilizaría ese artefacto. Los registros se enviarían al sistema de recolección de la plataforma. Las tareas administrativas se ejecutarían con la misma versión y configuración del servicio. Aplicar los factores no exige Kubernetes ni una arquitectura de microservicios: su utilidad también alcanza aplicaciones con un único despliegue.
+
+\textbf{Autorización con OAuth 2.0}
+
+OAuth 2.0 es un marco de autorización que permite conceder acceso limitado a recursos. Distingue propietario del recurso, cliente, servidor de autorización y servidor de recursos. El cliente obtiene un token de acceso y lo presenta al servicio protegido; los alcances delimitan los permisos concedidos. Para procesos que actúan por cuenta propia, el flujo de credenciales del cliente corresponde a clientes confidenciales capaces de proteger sus credenciales \parencite{hardtOAuth}. La autenticación del usuario requiere una capa específica: OpenID Connect (OIDC) añade identidad sobre OAuth 2.0 \parencite{sakimuraOpenid}.
+
+La práctica de seguridad actual recomienda el flujo de código de autorización con prueba de clave para intercambio de código (PKCE, por sus siglas en inglés), obligatoria para clientes públicos. Debe evitarse el flujo implícito y no utilizarse el de contraseña del propietario. Además, los tokens deben restringirse al destinatario y privilegios necesarios; el servicio receptor debe comprobar que fueron emitidos para él. En clientes públicos, los tokens de renovación deben rotarse o vincularse criptográficamente al emisor de la solicitud \parencite{lodderstedtSeguridad}.
+
+En una aplicación universitaria, iniciar sesión y autorizar la consulta de notas son decisiones diferentes. Un token válido no justifica acceder a expedientes ajenos: el servicio debe contrastar la operación solicitada con las reglas del dominio. Este ejemplo muestra por qué la protección no puede reducirse a aceptar cualquier token recibido por la puerta de entrada. Los permisos de negocio y la administración del clúster requieren controles propios y responsables identificados.
+
+\textbf{Integración y evaluación de la solución}
+
+Como propuesta derivada del análisis, la implementación comenzaría con límites de servicio y criterios de aceptación documentados. Después se construirían artefactos reproducibles, se separarían configuración y credenciales del código, y se definirían cargas declarativas con capacidad acorde a la demanda. Se configuraría el proveedor de autorización y se comprobarían permisos mediante casos permitidos y denegados. Finalmente, una liberación gradual evaluaría funcionamiento, recuperación y costo antes de ampliar el despliegue.
+
+La evaluación debería comparar beneficios concretos con el esfuerzo requerido. Si pagos concentra la demanda, su separación puede justificar recursos propios; si los módulos cambian siempre juntos, conviene revisar la partición. El costo debe considerar cómputo, almacenamiento, tráfico, monitoreo y trabajo del equipo. Estas son pautas de evaluación propuestas, no resultados experimentales: sin mediciones de carga y fallos no es defendible afirmar una mejora cuantitativa de disponibilidad o rendimiento.
+
+\section*{Observaciones y comentarios}
+La documentación consultada explica mecanismos y prácticas, pero no demuestra que su combinación sea óptima para cualquier proyecto. La principal limitación del análisis es la ausencia de una implementación medida. Se recomienda validar primero un servicio representativo y estimar su costo operativo; así, la adopción progresiva puede justificarse con evidencia y mantenerse dentro del alcance y presupuesto aprobados.
+
+\section*{Conclusiones}
+\begin{enumerate}
+\item Kubernetes administra cargas; los microservicios definen responsabilidades. Su integración requiere límites de negocio coherentes.
+\item Los doce factores favorecen despliegues reproducibles y procesos sustituibles, sin imponer una plataforma específica.
+\item OAuth 2.0 exige permisos restringidos y controles actuales; la identidad del usuario corresponde a una capa como OIDC.
+\item La adopción debe justificarse mediante pruebas, costos y capacidad operativa, además de las necesidades funcionales.
+\end{enumerate}
+
+\section*{Bibliografía}
+\printbibliography[heading=none]
+
+
